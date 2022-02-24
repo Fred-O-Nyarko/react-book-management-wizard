@@ -1,43 +1,44 @@
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import { StepperProps } from "../_shared/types";
+import { StepperProgress } from "./StepperProgress";
 
-interface IStepperProps {
-  title: string;
-  description: string;
-  step: number;
-}
+export const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
+  const stepperSelector = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    moveStepper();
+  }, [currentStep]);
 
-const Stepper: React.FC<IStepperProps> = ({}: IStepperProps) => {
+  const moveStepper = () => {
+    if (stepperSelector.current) {
+      const stepper = stepperSelector.current;
+      const stepWidth = stepper.offsetWidth / steps.length;
+      stepper.style.transform = `translateX(-${
+        stepWidth * (currentStep - 1)
+      }px)`;
+    }
+  };
+
   return (
-    <StyledStepper>
-      <div className="step">
-        <div className="value">1</div>
+    <StyledDiiv className="stepper">
+      <StepperProgress
+        stepTitles={steps.map((step) => step.title)}
+        currentStep={currentStep}
+      />
+      <div className="stepper-selector" ref={stepperSelector}>
+        {steps.map((step, i) => (
+          <div className="step-wrapper">
+            <step.element
+              step={i + 1}
+              currentStep={currentStep}
+              isFirst={i === 0}
+              isLast={i === steps.length - 1}
+            />
+          </div>
+        ))}
       </div>
-      <div className="description">Genre</div>
-    </StyledStepper>
+    </StyledDiiv>
   );
 };
 
-export default Stepper;
-const StyledStepper = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .step {
-    height: 3rem;
-    width: 3rem;
-    border-radius: 50%;
-    background-color: #e6e6e6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .description {
-    color: #a5a5a5;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-top: 0.5rem;
-  }
-`;
+const StyledDiiv = styled.div``;

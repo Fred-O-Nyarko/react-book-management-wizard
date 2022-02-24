@@ -1,0 +1,28 @@
+.stepper {
+  width: 600px;
+  height: 600px;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.step-wrapper {
+  width: 600px;
+  height: 100%;
+}
+
+.stepper-selector {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: inline-flex;
+  /* Animate each step movement */
+  transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1) 0s;
+}
+
+.stepper-progress {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  z-index: 9;
+}
