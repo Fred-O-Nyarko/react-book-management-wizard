@@ -4,15 +4,20 @@ import data from "./data/generes.json";
 import { ReactComponent as Back } from "./_shared/assets/left-arrow.svg";
 import { IGenre, Step, StepProps } from "./_shared/types";
 
-import { useState } from "react";
-import { Genres } from "./steps";
+import { useEffect, useState } from "react";
+import { Genres, Subgenres } from "./steps";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { isEmpty } from "./_shared/utils";
 export const App = () => {
-  const genres = JSON.parse(JSON.stringify(data)).genres as IGenre[];
+  const books = useAppSelector(({ books }) => books.books);
+  const selectedGenre = useAppSelector(({ step }) => step.genre);
+  const selectedSubgenre = useAppSelector(({ step }) => step.subgenre);
+  const isNewSubgenre = useAppSelector(({ step }) => step.addNewSubgenre);
 
   const steps: Step[] = [
     {
       title: "Genre",
-      // Render whatever you want here, we will improve this later
+      render: true,
       element: (stepProps) => (
         <StepBody {...stepProps}>
           <Genres genres={genres} />
@@ -21,17 +26,31 @@ export const App = () => {
     },
     {
       title: "Sub Genre",
-      element: (stepProps) => <StepBody {...stepProps} />,
+      render: true,
+      element: (stepProps) => (
+        <StepBody {...stepProps}>
+          <Subgenres />
+        </StepBody>
+      ),
     },
     {
       title: "Add new subgenre",
-      element: (stepProps) => <StepBody {...stepProps} />,
+      render: isNewSubgenre,
+      element: (stepProps) => (
+        <StepBody {...stepProps}>Add new subgenre</StepBody>
+      ),
     },
+
     {
       title: "Information",
+      render: true,
       element: (stepProps) => <StepBody {...stepProps} />,
     },
   ];
+
+  const genres = JSON.parse(JSON.stringify(data)).genres as IGenre[];
+
+  // listen to updates on genre click
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
@@ -74,7 +93,11 @@ export const App = () => {
           <Button
             className="step-button"
             variant="filled"
-            disabled={currentStep === steps.length}
+            disabled={
+              currentStep === steps.length ||
+              (isEmpty(selectedGenre) && currentStep === 1) ||
+              (isEmpty(selectedSubgenre) && currentStep === 2)
+            }
             content={<div>Next</div>}
             onClick={goNextStep}
           />
@@ -144,58 +167,4 @@ const StyledPage = styled.div`
   h6 {
     margin: 0;
   }
-  /*
-  .genres-list {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin-top: 3rem;
-  }
-
-  .genre-button {
-    margin-bottom: 1rem;
-  }
-
-  .button-content {
-    font-size: 1.2rem;
-  } */
 `;
-
-// const Step: React.FC<StepProps> = ({
-//   next,
-//   previous,
-//   isFirst,
-//   isLast,
-//   current,
-//   step,
-// }) => {
-//   return (
-//     <>
-//       <div className="genres-list">
-//         {Array(8)
-//           .fill(0)
-//           .map((_, index) => (
-//             <Button
-//               className="genre-button"
-//               onClick={() => {}}
-//               content={
-//                 <div className="button-content">{`Genre ${index + 1}`}</div>
-//               }
-//             />
-//           ))}
-//       </div>
-
-//       <div className="navigation">
-//         <Button
-//           className="back"
-//           content={
-//             <>
-//               <Back className="back-icon" /> <span>Back</span>
-//             </>
-//           }
-//           onClick={() => {}}
-//         />
-//         <Button content={<div>Next</div>} onClick={() => {}} />
-//       </div>
-//     </>
-//   );
-// };

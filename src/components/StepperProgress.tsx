@@ -23,7 +23,7 @@ export const StepperProgress: React.FC<StepperProgressProps> = ({
           const isActive = i + 1 === currentStep;
 
           return (
-            <div className="step-title">
+            <div className="step-title" key={i}>
               <div
                 className={`step-title-number ${isActive ? "active-step" : ""}`}
               >

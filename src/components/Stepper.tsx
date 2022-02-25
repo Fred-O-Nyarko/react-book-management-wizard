@@ -5,6 +5,8 @@ import { StepperProgress } from "./StepperProgress";
 
 export const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
   const stepperSelector = useRef<HTMLDivElement>(null);
+  const stepsToRender = steps.filter((step) => step.render === true);
+
   useEffect(() => {
     moveStepper();
   }, [currentStep]);
@@ -12,7 +14,7 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
   const moveStepper = () => {
     if (stepperSelector.current) {
       const stepper = stepperSelector.current;
-      const stepWidth = stepper.offsetWidth / steps.length;
+      const stepWidth = stepper.offsetWidth / stepsToRender.length;
       stepper.style.transform = `translateX(-${
         stepWidth * (currentStep - 1)
       }px)`;
@@ -20,14 +22,14 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
   };
 
   return (
-    <StyledDiiv className="stepper">
+    <StyledDiv className="stepper">
       <StepperProgress
-        stepTitles={steps.map((step) => step.title)}
+        stepTitles={stepsToRender.map((step) => step.title)}
         currentStep={currentStep}
       />
       <div className="stepper-selector" ref={stepperSelector}>
-        {steps.map((step, i) => (
-          <div className="step-wrapper">
+        {stepsToRender.map((step, i) => (
+          <div className="step-wrapper" key={i}>
             <step.element
               step={i + 1}
               currentStep={currentStep}
@@ -37,8 +39,8 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
           </div>
         ))}
       </div>
-    </StyledDiiv>
+    </StyledDiv>
   );
 };
 
-const StyledDiiv = styled.div``;
+const StyledDiv = styled.div``;

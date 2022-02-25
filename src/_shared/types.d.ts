@@ -18,6 +18,7 @@ interface StepperProps {
 
 export interface Step {
   title: string;
+  render?: boolean;
   element: (stepProps: StepProps) => JSX.Element;
 }
 
@@ -26,14 +27,26 @@ export interface StepperProgressProps {
   currentStep: number;
 }
 
-export interface Step {
-  title: string;
-  element: (stepProps: StepProps) => JSX.Element;
-}
-
 export interface StepProps {
   currentStep: number;
   isLast: boolean;
   isFirst: boolean;
   step: number;
+}
+
+export interface Book {
+  id: string;
+  title: string;
+  author?: string;
+  isbn?: string;
+  publisher?: string;
+  datePublished?: string;
+  pages?: number;
+  format?: string;
+  edition?: string;
+  editionLanguage?: string;
+  description?: string;
+}
+export interface Books {
+  books: Book[];
 }

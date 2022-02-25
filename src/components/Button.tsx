@@ -45,11 +45,11 @@ const StyledButton = styled.button<{ variant: "outlined" | "filled" }>`
   border: 1px solid #525a6c;
   color: ${({ variant }) => (variant === "filled" ? "#fff" : "#525a6c")};
 
-  &:hover {
+  /* &:hover {
     background-color: ${({ variant }) =>
-      variant === "filled" ? "transparent" : "#525a6c"};
+    variant === "filled" ? "transparent" : "#525a6c"};
     color: ${({ variant }) => (variant === "filled" ? "#525a6c" : "#fff")};
-  }
+  } */
 
   &:disabled {
     background-color: #c6c5cb;

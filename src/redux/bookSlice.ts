@@ -1,46 +1,30 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../app/store";
-
-// Define a type for the slice state
-interface BookState {
-  title: string;
-  author?: string;
-  isbn?: string;
-  publisher?: string;
-  datePublished?: string;
-  pages?: number;
-  format?: string;
-  edition?: string;
-  editionLanguage?: string;
-  description?: string;
-}
+import { createSlice, PayloadAction, current } from "@reduxjs/toolkit";
+import { Books, Book } from "../_shared/types";
+// import type { RootState } from "../../app/store";
 
 // Define the initial state using that type
-const initialState: BookState = {
-  title: "",
+const initialState: Books = {
+  books: [],
 };
 
-export const counterSlice = createSlice({
-  name: "counter",
+export const bookSlice = createSlice({
+  name: "bookSlice",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    // increment: (state) => {
-    //   state.value += 1
-    // },
-    // decrement: (state) => {
-    //   state.value -= 1
-    // },
-    // // Use the PayloadAction type to declare the contents of `action.payload`
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value += action.payload
-    // },
+    addBook: (state, action: PayloadAction<Book>) => {
+      state.books = [...state.books, action.payload];
+      console.log(current(state).books, action.payload);
+    },
+    removeBook: (state, action: PayloadAction<Books>) => {
+      state = action.payload;
+    },
   },
 });
 
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { addBook, removeBook } = bookSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.counter.value;
+// export const selectCount = (state: RootState) => undefined;
 
-export default counterSlice.reducer;
+export default bookSlice.reducer;
